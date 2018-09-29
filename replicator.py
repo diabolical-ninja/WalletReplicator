@@ -41,6 +41,8 @@ qry = "SELECT * FROM {}".format(destination)
 df_existing = pd.read_sql(con = engine, sql = qry)
 
 
+df_existing.transaction_id = df_existing.transaction_id.apply(lambda x: str(x))
+
 #%%
 # Source both user accounts & category mappings
 user_categories_df = wallet.category_collection(DataFrame=True)
@@ -61,6 +63,7 @@ df.transaction_time = pd.to_datetime(df.transaction_time).astype(str)
 #%%
 # Upsert to get only the new records & apply records updates
 df = pd.concat([df_existing[~df_existing.transaction_id.isin(df.transaction_id)], df], sort=False)
+
 
 
 #%%
