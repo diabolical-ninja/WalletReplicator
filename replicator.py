@@ -69,7 +69,6 @@ df = pd.concat([df_existing[~df_existing.transaction_id.isin(df.transaction_id)]
 # Upload to DB
 if df.shape[0] > 0:
 
-    conn.execute("DELETE FROM {}".format(destination))
     df.head(0).to_sql('wallet', engine, if_exists = "replace", schema="finance", index=False)
     conn = engine.raw_connection()
     cur = conn.cursor()
