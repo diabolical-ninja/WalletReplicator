@@ -65,12 +65,12 @@ df.transaction_time = pd.to_datetime(df.transaction_time).astype(str)
 df = pd.concat([df_existing[~df_existing.transaction_id.isin(df.transaction_id)], df], sort=False)
 
 
-
 #%%
 # Upload to DB
 if df.shape[0] > 0:
 
-    df.head(0).to_sql(destination, engine,if_exists='replace',index=False) #truncates the table
+    conn.execute("DELETE FROM {}".format(destination))
+    df.head(0).to_sql('wallet', engine, if_exists = "replace", schema="finance", index=False)
     conn = engine.raw_connection()
     cur = conn.cursor()
     output = io.StringIO()
