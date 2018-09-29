@@ -1,0 +1,9 @@
+auth:
+  token: '<Token generated in app>'
+  user: 'Email Address'
+db:
+  server: '<server name or IP>'
+  port: '<port>'
+  username: '<user>'
+  password: '<password>'
+  dbname: '<DB name>'
