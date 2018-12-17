@@ -34,7 +34,6 @@ engine = create_engine('postgresql://{}:{}@{}:{}/{}'.format(
 destination = 'finance.wallet'
 
 
-
 #%%
 # Get Existing Records
 qry = "SELECT * FROM {}".format(destination)
@@ -60,6 +59,7 @@ df.rename({
         , inplace=True, axis="columns")
 df.transaction_time = pd.to_datetime(df.transaction_time).astype(str)
 
+
 #%%
 # Upsert to get only the new records & apply records updates
 df = pd.concat([df_existing[~df_existing.transaction_id.isin(df.transaction_id)], df], sort=False)
@@ -69,9 +69,14 @@ df = pd.concat([df_existing[~df_existing.transaction_id.isin(df.transaction_id)]
 # Upload to DB
 if df.shape[0] > 0:
 
-    df.head(0).to_sql('wallet', engine, if_exists = "replace", schema="finance", index=False)
+    # Establish DB Connection Object
     conn = engine.raw_connection()
     cur = conn.cursor()
+
+    # Truncate Existing Contents
+    cur.execute("DELETE FROM {}".format(destination))
+
+    # New + Existing Records
     output = io.StringIO()
     df.to_csv(output, sep='\t', header=False, index=False)
     output.seek(0)
