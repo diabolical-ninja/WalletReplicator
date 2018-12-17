@@ -8,7 +8,7 @@ Date:   2018-09-29
 CREATE TABLE finance.wallet (
     transaction_time timestamp,
     category VARCHAR(255),
-    amount NUMERIC(2),
+    amount NUMERIC(12,2),
     notes VARCHAR,
     transaction_id UUID
 )
